@@ -2,7 +2,8 @@
 
 class Interview
 {
-	public $title = 'Interview test';
+    //The member need to be declared as static inorder to read the property at Class level
+	public static $title = 'Interview test';
 }
 
 $lipsum = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus incidunt, quasi aliquid, quod officia commodi magni eum? Provident, sed necessitatibus perferendis nisi illum quos, incidunt sit tempora quasi, pariatur natus.';
@@ -16,6 +17,17 @@ $people = [
 ];
 
 $person = $_POST['person'];
+
+//Add the person object to people only on entering with some values
+if(!is_null($person))  {
+    $people[] = [
+        'id' => count($people) + 1,
+        'first_name' => $person['first_name'],
+        'last_name' => $person['last_name'],
+        'email' => $person['email']
+    ];
+}
+
 
 ?>
 
@@ -37,17 +49,13 @@ $person = $_POST['person'];
 	<h1><?= Interview::$title; ?></h1>
 
 	<?php
-	// Print 10 times
-	for ($i = 10; $i < 0; $i++) {
-		echo '<p>' + $lipsum + '</p>';
-	}
+	echo '<p>' . $lipsum . '</p>';
 	?>
-
 
 	<hr>
 
-
-	<form method="get">
+    <!-- The form method should match with the backend method and post is preferred rather than get method for form data-->
+	<form method="post">
 		<p><label for="firstName">First name</label> <input type="text" name="person[first_name]" id="firstName"></p>
 		<p><label for="lastName">Last name</label> <input type="text" name="person[last_name]" id="lastName"></p>
 		<p><label for="email">Email</label> <input type="text" name="person[email]" id="email"></p>
@@ -57,11 +65,8 @@ $person = $_POST['person'];
 	<?php if ($person) : ?>
 		<p><strong>Person</strong> <?= $person['first_name']; ?>, <?= $person['last_name']; ?>, <?= $person['email']; ?></p>
 	<?php endif; ?>
-
-
+	
 	<hr>
-
-
 	<table>
 		<thead>
 			<tr>
@@ -73,9 +78,10 @@ $person = $_POST['person'];
 		<tbody>
 			<?php foreach ($people as $person) : ?>
 				<tr>
-					<td><?= $person->first_name; ?></td>
-					<td><?= $person->last_name; ?></td>
-					<td><?= $person->email; ?></td>
+					<!--  $person is an array not an object we can access array params with indexes-->
+					<td><?= $person['first_name']; ?></td>
+					<td><?= $person['last_name']; ?></td>
+					<td><?= $person['email']; ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
